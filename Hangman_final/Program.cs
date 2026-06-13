@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,55 +14,42 @@ namespace Hangman
         {
             bool retry;
             Console.WriteLine("\t\tHangman Game");
-            do
+            Console.WriteLine("\nPress any key to start");
+            Console.ReadKey();
+            Console.WriteLine();
+            IRandomizer game;
+            Basic function = new Basic();
+            Settings settings = new Settings();
+
+            string ask = get_input();
+            ask = ask.ToUpper();
+
+            bool difficulty = false;
+            bool reve = false;
+            int id = 0;
+            if (ask[0] == 'Y')
             {
-                Console.WriteLine("\nPress any key to start");
-                Console.ReadKey();
-                Console.WriteLine();
-                IRandomizer game;
-                Basic function = new Basic();
-                Settings settings = new Settings();
-                string ask = Console.ReadLine();
-                ask = ask.ToUpper();
-                bool difficulty = false;
-                bool reve = false;
-                int id = 0;
-                if (ask[0] == 'Y')
+                Console.WriteLine("Want to change difficulty");
+                string cd = get_input();
+                cd = cd.ToUpper();
+
+                if ((cd[0] == 'Y'))
                 {
-                    try
-                    {
-                        Console.WriteLine("Want to change difficulty");
-                        string cd = Console.ReadLine();
-                        cd = cd.ToUpper();
-                        if (!(cd[0] == 'Y'))
-                        {
-                            throw new Exception();
-                        }
-
-                        id = settings.difficultyLevel(ref difficulty);
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-
-
-                    try
-                    {
-                        Console.WriteLine("Want to change revealed words");
-                        string cr = Console.ReadLine();
-                        cr = cr.ToUpper();
-                        if (!(cr[0] == 'Y'))
-                        {
-                            throw new Exception();
-                        }
-
-                        reve = settings.revealCount();
-                    }
-                    catch (Exception e)
-                    {
-                    }
+                    id = settings.difficultyLevel(ref difficulty);
                 }
 
+
+                Console.WriteLine("Want to change revealed words");
+                string cr = get_input();
+                cr = cr.ToUpper();
+
+                if ((cr[0] == 'Y'))
+                {
+                    reve = settings.revealCount();
+                }
+            }
+            do
+            {
                 if (difficulty == true)
                 {
                     game = new RandDiff();
@@ -103,8 +91,9 @@ namespace Hangman
 
                 retry = false;
                 Console.WriteLine("\nWanna play again");
-                string retry_str = Console.ReadLine();
+                string retry_str = get_input();
                 retry_str = retry_str.ToUpper();
+
                 if (retry_str == null)
                 {
                     break;
@@ -113,7 +102,27 @@ namespace Hangman
                 {
                     retry = true;
                 }
+
+                Console.WriteLine();
             } while (retry);
+        }
+
+        public static string get_input()
+        {
+            string str = Console.ReadLine();
+            while (string.IsNullOrEmpty(str))
+            {
+                Console.WriteLine("Cannot leave it empty, try again.");
+                bool this_con = false;
+                do
+                {
+                    str = Console.ReadLine();
+                    if (str != null)
+                        this_con = true;
+                } while (!this_con);
+            }
+
+            return str;
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Hangman
                         return 1;           //1 if hard
                     default:
                         Console.WriteLine("Invalid option selected");
+                        Console.WriteLine("Please select a difficulty level");
+                        diff = Console.ReadLine();
                         break;
                 }
             } while (true);
